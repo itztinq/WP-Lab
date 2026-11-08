@@ -6,14 +6,34 @@
     <style type="text/css">
         body {
             width: 800px;
-            margin: auto;
+            margin: 40px auto;
             font-family: Arial, sans-serif;
         }
         h1 {
             color: #333;
+            margin-bottom: 10px;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        main {
+            padding: 20px;
         }
         form {
             margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        label {
+            margin-right: 5px;
+        }
+        table {
+            width: 100%;
+            margin-top: 25px;
+            margin-bottom: 35px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
         }
         .workshop-option {
             margin: 10px 0;
@@ -23,6 +43,21 @@
         }
         .workshop-option:hover {
             background-color: #f5f5f5;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            padding: 6px 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button,
+        input[type="submit"] {
+            padding: 8px 16px;
+            border: 1px solid black;
+            border-radius: 4px;
         }
         .error {
             color: red;
@@ -39,7 +74,7 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
-    <form action="/" method="GET">
+    <form action="/workshops" method="GET">
         <h2>Search workshops:</h2>
         <label>Title or category contains:</label>
         <input type="text" name="text">
@@ -47,6 +82,39 @@
         <input type="number" name="maxPrice" min="0" step="0.01">
         <input type="submit" value="Search">
     </form>
+
+    <h2>Manage workshops</h2>
+
+    <a href="/workshops/workshop-form">Add new workshop</a>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Free seats</th>
+            <th>Instructor</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="workshop : ${workshops}">
+            <td th:text="${workshop.title}"></td>
+            <td th:text="${workshop.category}"></td>
+            <td th:text="${workshop.price}"></td>
+            <td th:text="${workshop.capacity}"></td>
+            <td th:text="${workshop.instructor.name + ' ' + workshop.instructor.surname}"></td>
+            <td>
+                <a th:href="@{/workshops/workshop-form/{id}(id=${workshop.id})}">Edit</a>
+
+                <form th:action="@{/workshops/delete/{id}(id=${workshop.id})}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
     <form action="/registration" method="POST">
         <h2>Choose a workshop:</h2>
@@ -57,7 +125,11 @@
              Workshops with 0 free seats are shown, but their radio button is disabled -->
         <div class="workshop-option" th:each="workshop : ${workshops}">
             <input type="radio" name="workshopTitle" th:value="${workshop.title}" th:disabled="${workshop.capacity == 0}" required>
-            <span th:text="'Title: ' + ${workshop.title} + ', Category: ' + ${workshop.category} + ', Price: ' + ${workshop.price} + ' MKD, Free seats: ' + ${workshop.capacity}"></span>
+            <span th:text="
+                    'Title: ' + ${workshop.title} + ', Category: ' + ${workshop.category} +
+                    ', Price: ' + ${workshop.price} + ' MKD, Free seats: ' + ${workshop.capacity} +
+                    ', Instructor: ' + ${workshop.instructor.name + ' ' + workshop.instructor.surname}">
+            </span>
         </div>
 
 

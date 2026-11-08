@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Workshop Registration - Workshop Form</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Workshop Registration - Workshop Form</h1>
+</header>
+<main>
+    <form th:action="${workshop != null} ? @{/workshops/edit/{id}(id=${workshop.id})} : @{/workshops/add}" method="post">
+
+        <label>Title:</label>
+        <input type="text" name="title" th:value="${workshop != null} ? ${workshop.title} : ''">
+
+        <label>Category:</label>
+        <input type="text" name="category" th:value="${workshop != null} ? ${workshop.category} : ''" required>
+
+        <label>Price:</label>
+        <input type="number" name="price" min="0" step="0.01"
+               th:value="${workshop != null} ? ${workshop.price} : ''" required>
+
+        <label>Capacity:</label>
+        <input type="number" name="capacity" min="0"
+               th:value="${workshop != null} ? ${workshop.capacity} : ''" required>
+
+        <label>Instructor:</label>
+        <select name="instructorId" required>
+            <option th:each="instructor : ${instructors}"
+                    th:value="${instructor.id}"
+                    th:text="${instructor.name + ' ' + instructor.surname}"
+                    th:selected="${workshop != null and workshop.instructor.id == instructor.id}">
+            </option>
+        </select>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <p><a href="/workshops">Back to workshops</a></p>
+</main>
+</body>
+</html>

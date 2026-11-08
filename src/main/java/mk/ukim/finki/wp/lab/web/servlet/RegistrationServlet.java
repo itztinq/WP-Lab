@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
+@WebServlet(name = "RegistrationServlet", urlPatterns = "/servlet/registration")
 public class RegistrationServlet extends HttpServlet {
     private final SpringTemplateEngine springTemplateEngine;
     private final RegistrationService registrationService;
@@ -42,7 +42,7 @@ public class RegistrationServlet extends HttpServlet {
             registration = registrationService.register(workshopTitle, participantName, participantEmail, numberOfSeats);
         } catch (IllegalArgumentException e) {
             String encodedMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
-            resp.sendRedirect("/?errorMessage=" + encodedMessage);
+            resp.sendRedirect("/servlet/workshops?errorMessage=" + encodedMessage);
             return;
         }
 

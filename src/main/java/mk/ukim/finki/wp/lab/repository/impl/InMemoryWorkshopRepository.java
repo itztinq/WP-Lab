@@ -38,4 +38,24 @@ public class InMemoryWorkshopRepository implements WorkshopRepository {
                 })
                 .toList();
     }
+
+    @Override
+    public Optional<Workshop> findById(Long id) {
+        return DataHolder.workshops
+                .stream()
+                .filter(workshop -> workshop.getId().equals(id))
+                .findFirst();
+    }
+
+    @Override
+    public Workshop save(Workshop workshop) {
+        DataHolder.workshops.removeIf(existingWorkshop -> existingWorkshop.getId().equals(workshop.getId()));
+        DataHolder.workshops.add(workshop);
+        return workshop;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        DataHolder.workshops.removeIf(workshop -> workshop.getId().equals(id));
+    }
 }
