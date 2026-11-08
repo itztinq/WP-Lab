@@ -7,6 +7,8 @@ import mk.ukim.finki.wp.lab.repository.WorkshopRepository;
 import mk.ukim.finki.wp.lab.service.RegistrationService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
     private final RegistrationRepository registrationRepository;
@@ -39,5 +41,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         registrationRepository.save(registration);
 
         return registration;
+    }
+
+    @Override
+    public List<Registration> listAll() {
+        return registrationRepository.findAll();
     }
 }
