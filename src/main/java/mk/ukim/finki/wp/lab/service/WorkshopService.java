@@ -25,4 +25,6 @@ public interface WorkshopService {
             Long instructorId
     );
     void deleteById(Long id);
+
+    Workshop addRating(Long workshopId, Double rating);
 }

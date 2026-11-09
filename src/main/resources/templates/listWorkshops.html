@@ -95,6 +95,8 @@
             <th>Price</th>
             <th>Free seats</th>
             <th>Instructor</th>
+            <th>Rating Average</th>
+            <th>Add Rating</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -105,6 +107,13 @@
             <td th:text="${workshop.price}"></td>
             <td th:text="${workshop.capacity}"></td>
             <td th:text="${workshop.instructor.name + ' ' + workshop.instructor.surname}"></td>
+            <td th:text="${workshop.getAvgRating() != null ? #numbers.formatDecimal(workshop.getAvgRating(), 1, 2) : 'No ratings yet'}"></td>
+            <td>
+                <form th:action="@{/workshops/rate/{id}(id=${workshop.id})}" method="post">
+                    <input type="number" name="rating" min="1" max="5" step="0.5" required>
+                    <button type="submit">Add Rating</button>
+                </form>
+            </td>
             <td>
                 <a th:href="@{/workshops/workshop-form/{id}(id=${workshop.id})}">Edit</a>
 

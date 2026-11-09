@@ -39,21 +39,7 @@ public class WorkshopServiceImpl implements WorkshopService {
 
     @Override
     public Workshop create(String title, String category, Double price, Integer capacity, Long instructorId) {
-        if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("Title is required");
-        }
-
-        if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("Category is required");
-        }
-
-        if (price == null || price < 0) {
-            throw new IllegalArgumentException("Price must be non-negative");
-        }
-
-        if (capacity == null || capacity < 0) {
-            throw new IllegalArgumentException("Capacity must be non-negative");
-        }
+        validate(title, category, price, capacity);
 
         Instructor instructor = instructorRepository.findById(instructorId)
                 .orElseThrow(() -> new IllegalArgumentException("Instructor not found"));
@@ -68,21 +54,7 @@ public class WorkshopServiceImpl implements WorkshopService {
         Workshop workshop = workshopRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Workshop not found"));
 
-        if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("Title is required");
-        }
-
-        if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("Category is required");
-        }
-
-        if (price == null || price < 0) {
-            throw new IllegalArgumentException("Price must be non-negative");
-        }
-
-        if (capacity == null || capacity < 0) {
-            throw new IllegalArgumentException("Capacity must be non-negative");
-        }
+        validate(title, category, price, capacity);
 
         Instructor instructor = instructorRepository.findById(instructorId)
                 .orElseThrow(() -> new IllegalArgumentException("Instructor not found"));
@@ -99,5 +71,32 @@ public class WorkshopServiceImpl implements WorkshopService {
     @Override
     public void deleteById(Long id) {
         workshopRepository.deleteById(id);
+    }
+
+    private void validate(String title, String category, Double price, Integer capacity) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Title is required");
+        }
+
+        if (category == null || category.isEmpty()) {
+            throw new IllegalArgumentException("Category is required");
+        }
+
+        if (price == null || price < 0) {
+            throw new IllegalArgumentException("Price must be non-negative");
+        }
+
+        if (capacity == null || capacity < 0) {
+            throw new IllegalArgumentException("Capacity must be non-negative");
+        }
+    }
+
+    @Override
+    public Workshop addRating(Long workshopId, Double rating) {
+        Workshop workshop = workshopRepository.findById(workshopId)
+                .orElseThrow(() -> new IllegalArgumentException("Workshop not found"));
+
+        workshop.addRating(rating);
+        return workshopRepository.save(workshop);
     }
 }

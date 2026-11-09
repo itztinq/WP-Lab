@@ -113,4 +113,16 @@ public class WorkshopController {
         workshopService.deleteById(id);
         return "redirect:/workshops";
     }
+
+    @PostMapping("/workshops/rate/{id}")
+    public String addRating(@PathVariable Long id, @RequestParam Double rating) {
+        try {
+            workshopService.addRating(id, rating);
+            return "redirect:/workshops";
+        }
+        catch (IllegalArgumentException exception) {
+            String errorMessage = URLEncoder.encode(exception.getMessage(), StandardCharsets.UTF_8);
+            return "redirect:/workshops?errorMessage=" + errorMessage;
+        }
+    }
 }
